@@ -4,7 +4,6 @@ using System.Collections;
 //==========================================================
 // State class represents a State the game may currently be in
 //==========================================================
-
 public class State
 {
     // StateName property used to retrieve this data

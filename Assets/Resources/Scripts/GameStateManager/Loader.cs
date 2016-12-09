@@ -6,27 +6,27 @@ public class Loader : MonoBehaviour
     public GameStateManager stateManager;
     public Updater UpdateController;
 
-    // Use this for initialization
+    
     void Awake()
     {
         stateManager = GameStateManager.Create();
         if (stateManager != null)
         {
-            //Register game states here.
-            //stateManager.RegisterState<SimpleState>("SimpleState");
-            stateManager.RegisterState<GeometryGenState>("GeometryGen");
+            // Game states registered
+            stateManager.RegisterState<GeometryGenState>("GeometryGen"); 
             stateManager.RegisterState<TerrainGenState>("TerrainGen");
             stateManager.RegisterState<MazeGenState>("MazeGen");
             stateManager.RegisterState<PathfindingState>("Pathfinding");
 
-
-            //stateManager.EnterState("SimpleState");
+            
         }
 
-        Instantiate(UpdateController);
+        Instantiate(UpdateController); // Creates an instance of the Update controller
 
     }
-
+    //=============================================================================================
+    // Declares the different states to switch between
+    //=============================================================================================
     public void StateChange(int stateName)
     {
         switch(stateName)

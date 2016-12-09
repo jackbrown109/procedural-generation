@@ -4,6 +4,7 @@ using System.Collections;
 
 public class TerrainGenState : State
 {
+    // Set references to the game objects
     GameObject TerrainGen;
     GameObject mesh;
 
@@ -24,24 +25,25 @@ public class TerrainGenState : State
     {
         Debug.Log("TerrainGenState Initialise");
 
+        // Load the prefab for each game object
         TerrainGen = Resources.Load("Prefabs/TerrainGen/MapGenerator", typeof(GameObject)) as GameObject;
         mesh = Resources.Load("Prefabs/TerrainGen/Mesh", typeof(GameObject)) as GameObject;
         Camera.main.transform.rotation = Quaternion.Euler(new Vector3(43.5f, 0, 0));
         Camera.main.transform.position = new Vector3(-8, 123, -260);
         
+        // If there isn't a mapdisplay script on mesh, create one
         if (mesh.GetComponent<MapDisplay>() == null)
         {
             mapDisplay = mesh.AddComponent<MapDisplay>();
             mapDisplay.meshFilter = mesh.AddComponent<MeshFilter>();
             mapDisplay.meshRenderer = mesh.AddComponent<MeshRenderer>();
-            //mapDisplay.meshRenderer.material = new Material(Shader.Find("Diffuse"));
             mapDisplay.meshRenderer.material = mesh.GetComponent<Material>();
         }
 
         mapGen = TerrainGen.GetComponent<MapGenerator>();
         mapGen.Generate(128, 128, 0, 30, 4, 0.5f, 2, Vector2.zero, 10.0f, mesh);
         
-
+        // Create instance of game objects
         GameObject.Instantiate(TerrainGen);
         GameObject.Instantiate(mesh);
 
@@ -58,6 +60,9 @@ public class TerrainGenState : State
         }
     }
 
+    //=============================================================================================
+    // When a state is left, destroy all game object instances
+    //=============================================================================================
     protected override void Leave(float a_fTimeStep)
     {
         Debug.Log("TerrainGenState Leave");

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GeometryGenState : State
 {
+    // Set references to the game objects
     GameObject Cube;
     GameObject Cylinder;
     GameObject Sphere;
@@ -22,19 +23,20 @@ public class GeometryGenState : State
     {
         Debug.Log("GeometryGenState Initialise");
 
+        // Load the prefab for each game object
         Cube = Resources.Load("Prefabs/GeometryGen/CubeGeneration", typeof(GameObject)) as GameObject;
         Cylinder = Resources.Load("Prefabs/GeometryGen/CylinderGeneration", typeof(GameObject)) as GameObject;
         Sphere = Resources.Load("Prefabs/GeometryGen/SphereGeneration", typeof(GameObject)) as GameObject;
 
         Sliders = Resources.Load("Prefabs/GeometryGen/GeometryCanvas", typeof(GameObject)) as GameObject;
 
-        Camera.main.transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
-        Camera.main.transform.position = new Vector3(0, 89, -16);
+        Camera.main.transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0)); // Alters main camera rotation
+        Camera.main.transform.position = new Vector3(0, 89, -16); // Alters main camera position
 
+        // Instantiate game objects
         GameObject.Instantiate(Cube);
         GameObject.Instantiate(Cylinder);
         GameObject.Instantiate(Sphere);
-
         GameObject.Instantiate(Sliders);
 
         Process = Update;
@@ -50,6 +52,9 @@ public class GeometryGenState : State
         }
     }
 
+    //=============================================================================================
+    // When a state is left, destroy all game object instances
+    //=============================================================================================
     protected override void Leave(float a_fTimeStep)
     {
         Debug.Log("GeometryGenState Leave");

@@ -2,14 +2,20 @@
 using System;
 using System.Collections.Generic;
 
+//=============================================================================================
+// GameStateManager gives access to the Create, Instance and Destroy functionality from the
+// manager class.
+//=============================================================================================
 public class GameStateManager : Manager <GameStateManager>
 {
     private State _currentState = null;
 
+    // Keeps track of the game states the game might currently be in
     private Stack<State> m_pActiveStates;
 
     State temp;
 
+    // Keeps track of registered states
     private Dictionary<string, Type>registeredStates;
 
     public State CurrentState
@@ -17,7 +23,9 @@ public class GameStateManager : Manager <GameStateManager>
         get { return _currentState; }
     }
 
+    //=============================================================================================
     // Private constructor so that only the Manager Base Class can create an instance of this object
+    //=============================================================================================
     private GameStateManager()
     {
         m_pActiveStates = new Stack<State>();
@@ -28,14 +36,19 @@ public class GameStateManager : Manager <GameStateManager>
         
     }
 
+    //=============================================================================================
+    // Update function so the GameStateManager is updated every frame.
+    //=============================================================================================
     public void Update()
     {
         float deltaTime = Time.deltaTime;
+
+        // For each state currently in m_pActiveStates
         foreach (State state in m_pActiveStates)
         {
             if (m_pActiveStates.Count > 0)
             {
-                state.Process.Invoke(deltaTime);
+                state.Process.Invoke(deltaTime); // invokes the process the state needs to execute
                 if (state.IsBlocking)
                 {
                     break;
@@ -47,6 +60,7 @@ public class GameStateManager : Manager <GameStateManager>
 
     public State StateExists(string a_stateName)
     {
+        // For each state currently in m_pActiveStates
         foreach (State state in m_pActiveStates)
         {
             string pName = state.StateName;
@@ -58,6 +72,10 @@ public class GameStateManager : Manager <GameStateManager>
         return null;
     }
 
+    //=============================================================================================
+    // EnterState looks through the dictionary of registered states to find the state that has 
+    // been registered with the name or identifier looked for.
+    //=============================================================================================
     public bool EnterState (string a_stateName)
     {
         State pState = StateExists(a_stateName);
@@ -71,7 +89,9 @@ public class GameStateManager : Manager <GameStateManager>
         {
             if (registeredStates.ContainsKey(a_stateName))
             {
+                // Used to only allocate the memory needed at that point
                 State nextState = Activator.CreateInstance(registeredStates[a_stateName], a_stateName) as State;
+
                 PushState(nextState);
                 return true;
             }
@@ -121,6 +141,9 @@ public class GameStateManager : Manager <GameStateManager>
         _currentState = m_pActiveStates.Peek();
     }
 
+    //=============================================================================================
+    // Holds type information rather than instances of states to save on memory space.
+    //=============================================================================================
     public void RegisterState<T> (string a_stateName)
         where T : State
     {

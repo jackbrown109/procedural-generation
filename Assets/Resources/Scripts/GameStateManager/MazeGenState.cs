@@ -3,6 +3,7 @@ using System.Collections;
 
 public class MazeGenState : State
 {
+    //Sets reference to the game object
     GameObject MazeGenerator;
 
     public GameStateManager stateManager;
@@ -19,10 +20,13 @@ public class MazeGenState : State
     {
         Debug.Log("MazeGenState Initialise");
 
+        // Load the prefab for each game object
         MazeGenerator = Resources.Load("Prefabs/MazeGen/MazeGenerator", typeof(GameObject)) as GameObject;
-        Camera.main.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
-        Camera.main.transform.position = new Vector3(0, 25, 0);
 
+        Camera.main.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0)); // Alters main camera rotation
+        Camera.main.transform.position = new Vector3(0, 25, 0); // Alters main camera position
+
+        // Create an instance of the game object
         GameObject.Instantiate(MazeGenerator);
         
         Process = Update;
@@ -38,6 +42,9 @@ public class MazeGenState : State
         }
     }
 
+    //=============================================================================================
+    // When a state is left, destroy all game object instances
+    //=============================================================================================
     protected override void Leave(float a_fTimeStep)
     {
         Debug.Log("MazeGenState Leave");
